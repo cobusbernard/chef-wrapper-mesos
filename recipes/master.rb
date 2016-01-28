@@ -30,6 +30,7 @@ include_recipe 'zookeeper::config_render'
 include_recipe 'zookeeper::service'
 
 instances = search(:node, "role:mesos-master AND chef_environment:#{node.chef_environment}")
+instances.sort_by!{ |n| n[:ipaddress] }
 node.set["mesos"]["master"]["flags"]["zk"] = "zk://" + instances.map{|n| "#{n[:ipaddress]}:2181" }.join(",") + "/mesos"
 
 node.set["mesos"]["master"]["flags"]["quorum"] = [instances.length / 2, 1].max

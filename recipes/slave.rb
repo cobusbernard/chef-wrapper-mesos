@@ -25,6 +25,7 @@
 #
 
 instances = search(:node, "role:mesos-master AND chef_environment:#{node.chef_environment}")
+instances.sort_by!{ |n| n[:ipaddress] }
 node.set["mesos"]["slave"]["flags"]["master"] = "zk://" + instances.map{|n| "#{n[:ipaddress]}:2181" }.join(",") + "/mesos"
 
 include_recipe 'mesos::slave'

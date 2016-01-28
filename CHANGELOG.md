@@ -1,3 +1,7 @@
+# 0.1.7
+
+Lost the sort in previous cleanup.
+
 # 0.1.6
 
 Cleaning up the instance search code.
