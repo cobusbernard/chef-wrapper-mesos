@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: chef-wrapper-mesos
-# Recipe:: default
+# Recipe:: server
 #
 # Copyright (C) 2016 Cobus Bernard
 #
@@ -24,9 +24,12 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-include_recipe 'zookeeper::default'
-include_recipe 'zookeeper::install'
-include_recipe 'zookeeper::config_render'
-include_recipe 'zookeeper::service'
+instances = Array.new
+instances = search(:node, "role:mesos-master AND chef_environment:#{node.chef_environment}")
+instances.sort_by!{ |n| n[:ipaddress] }
+instances.map!{ |n| n[:ipaddress] }
 
-include_recipe 'mesos::default'
+zooker_url = 'zk://' + instances.join(':2181,') + ':2181/mesos'
+node.set["mesos"]["slave"]["flags"]["master"] = zooker_url
+
+include_recipe 'mesos::slave'

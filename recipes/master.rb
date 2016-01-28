@@ -24,6 +24,11 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
+include_recipe 'zookeeper::default'
+include_recipe 'zookeeper::install'
+include_recipe 'zookeeper::config_render'
+include_recipe 'zookeeper::service'
+
 instances = Array.new
 instances = search(:node, "role:mesos-master AND chef_environment:#{node.chef_environment}")
 instances.sort_by!{ |n| n[:ipaddress] }
@@ -31,5 +36,6 @@ instances.map!{ |n| n[:ipaddress] }
 
 zooker_url = 'zk://' + instances.join(':2181,') + ':2181/mesos'
 node.set["mesos"]["master"]["flags"]["zk"] = zooker_url
+node.set["mesos"]["master"]["flags"]["quorum"] = [instances.length / 2, 1].max
 
 include_recipe 'mesos::master'
