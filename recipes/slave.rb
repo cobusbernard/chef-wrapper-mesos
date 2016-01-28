@@ -24,12 +24,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-instances = Array.new
 instances = search(:node, "role:mesos-master AND chef_environment:#{node.chef_environment}")
-instances.sort_by!{ |n| n[:ipaddress] }
-instances.map!{ |n| n[:ipaddress] }
-
-zooker_url = 'zk://' + instances.join(':2181,') + ':2181/mesos'
-node.set["mesos"]["slave"]["flags"]["master"] = zooker_url
+node.set["mesos"]["slave"]["flags"]["master"] = "zk://" + instances.map{|n| "#{n[:ipaddress]}:2181" }.join(",") + "/mesos"
 
 include_recipe 'mesos::slave'
