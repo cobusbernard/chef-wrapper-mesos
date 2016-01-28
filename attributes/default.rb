@@ -1,4 +1,4 @@
-default_attributes(
+default = {
   :mesos => {
     :version => '0.25.0',
     :master => {
@@ -8,4 +8,4 @@ default_attributes(
       }
     }
   }
-)
+}
