@@ -24,9 +24,4 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-include_recipe 'zookeeper::default'
-include_recipe 'zookeeper::install'
-include_recipe 'zookeeper::config_render'
-include_recipe 'zookeeper::service'
-
 include_recipe 'mesos::default'
