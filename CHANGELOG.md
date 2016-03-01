@@ -1,3 +1,7 @@
+# 0.1.51
+
+Removing the Marathon attributes.
+
 # 0.1.50
 
 Using the latest 0.27.1 version of Mesos.
