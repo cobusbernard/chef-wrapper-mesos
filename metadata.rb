@@ -4,7 +4,9 @@ maintainer_email 'me@cobus.io'
 license          'MIT'
 description      'Installs/Configures chef-wrapper-mesos'
 long_description 'Installs/Configures chef-wrapper-mesos'
-version          '0.1.8'
+version          '0.1.50'
 
-depends 'zookeeper-cluster', '~> 1.3.2'
 depends 'mesos', '~> 3.5.1'
+
+depends 'zookeeper'
+depends 'hostsfile', '~> 2.4.5'

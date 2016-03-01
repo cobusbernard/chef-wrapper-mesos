@@ -24,15 +24,9 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-bag = data_bag_item('config', 'zookeeper')[node.chef_environment]
-node.default['zookeeper-cluster']['config']['instance_name'] = node['ipaddress']
-node.default['zookeeper-cluster']['config']['ensemble'] = bag['ensemble']
-include_recipe 'zookeeper-cluster::default'
-
-instances = search(:node, 'role:mesos-master AND chef_environment:#{node.chef_environment}')
-instances.sort_by! { |n| n[:ipaddress] }
-node.set['mesos']['master']['flags']['zk'] = 'zk://' + instances.map{ |n| '#{n[:ipaddress]}:2181' }.join(',') + '/mesos'
-
+instances = search(:node, "role:mesos-master AND chef_environment:#{node.chef_environment}")
+instances.sort_by! { |n| n[:fqdn] }
+node.set['mesos']['master']['flags']['zk'] = 'zk://' + instances.map{ |n| "#{n[:fqdn]}:2181" }.join(',') + '/mesos'
 node.set['mesos']['master']['flags']['quorum'] = [instances.length / 2, 1].max
 
 include_recipe 'mesos::master'

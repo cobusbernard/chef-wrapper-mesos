@@ -1,3 +1,7 @@
+# 0.1.50
+
+Using the latest 0.27.1 version of Mesos.
+
 # 0.1.7
 
 Lost the sort in previous cleanup.

@@ -1,0 +1,11 @@
+# Managed by Chef, do not change
+{
+  "zk": "<%= @zk_master %>",
+  "refreshSeconds": 60,
+  "ttl": 60,
+  "domain": "mesos",
+  "port": 53,
+  "resolvers": ["169.254.169.254","<%= @dns_upstream %>"],
+  "timeout": 5,
+  "email": "root.mesos-dns.mesos"
+}
