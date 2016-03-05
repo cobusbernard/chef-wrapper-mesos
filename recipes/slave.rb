@@ -42,24 +42,29 @@
 
 instances = search(:node, "role:mesos-master AND chef_environment:#{node.chef_environment}")
 instances.sort_by!{ |n| n[:fqdn] }
-mesos_master = "zk://" + instances.map{|n| "#{n[:fqdn]}:2181" }.join(",") + "/mesos"
 
-node.set['mesos']['slave']['flags']['master'] = mesos_master
-node.set['mesos']['slave']['flags']['containerizers'] = 'docker,mesos'
-node.set['mesos']['slave']['flags']['executor_registration_timeout'] = '5mins'
-node.set['mesos']['slave']['flags']['ip'] = node[:network][:interfaces][:eth1][:addresses].detect{|k,v| v[:family] == "inet" }.first
+# No point in setting up if there aren't any master nodes in the cluster.
+if instances.length > 0
 
-include_recipe 'mesos::slave'
+  mesos_master = "zk://" + instances.map{|n| "#{n[:fqdn]}:2181" }.join(",") + "/mesos"
 
-# Kubernetes demo specific
-directory '/etc/mesos-dns' do
-  owner 'root'
-  group 'root'
-  mode '0755'
-  action :create
-end
+  node.set['mesos']['slave']['flags']['master'] = mesos_master
+  node.set['mesos']['slave']['flags']['containerizers'] = 'docker,mesos'
+  node.set['mesos']['slave']['flags']['executor_registration_timeout'] = '5mins'
+  node.set['mesos']['slave']['flags']['ip'] = node[:network][:interfaces][:eth1][:addresses].detect{|k,v| v[:family] == "inet" }.first
 
-template "/etc/mesos-dns/config.json" do
-  source "mesos-dns-config.json.erb"
-  variables( :zk_master => mesos_master, :dns_upstream => '8.8.8.8' )
+  include_recipe 'mesos::slave'
+
+  # Kubernetes demo specific
+  directory '/etc/mesos-dns' do
+    owner 'root'
+    group 'root'
+    mode '0755'
+    action :create
+  end
+
+  template "/etc/mesos-dns/config.json" do
+    source "mesos-dns-config.json.erb"
+    variables( :zk_master => mesos_master, :dns_upstream => '8.8.8.8' )
+  end
 end

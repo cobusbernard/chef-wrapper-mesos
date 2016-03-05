@@ -26,6 +26,11 @@
 
 instances = search(:node, "role:mesos-master AND chef_environment:#{node.chef_environment}")
 instances.sort_by! { |n| n[:fqdn] }
+
+if instances.length == 0
+  instances = [ node ]
+end
+
 node.set['mesos']['master']['flags']['zk'] = 'zk://' + instances.map{ |n| "#{n[:fqdn]}:2181" }.join(',') + '/mesos'
 node.set['mesos']['master']['flags']['quorum'] = [instances.length / 2, 1].max
 
