@@ -51,7 +51,7 @@ if instances.length > 0
   node.set['mesos']['slave']['flags']['master'] = mesos_master
   node.set['mesos']['slave']['flags']['containerizers'] = 'docker,mesos'
   node.set['mesos']['slave']['flags']['executor_registration_timeout'] = '5mins'
-  node.set['mesos']['slave']['flags']['ip'] = node[:network][:interfaces][:eth1][:addresses].detect{|k,v| v[:family] == "inet" }.first
+  node.set['mesos']['slave']['flags']['ip'] = node[:ipaddress]
 
   include_recipe 'mesos::slave'
 

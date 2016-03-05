@@ -1,3 +1,7 @@
+# 0.1.53
+
+Removing the vagrant-ohai hack for VMs.
+
 # 0.1.52
 
 Adding in check for first spinning up the cluster: if there are no registered nodes as masters in chef, this is the first.
