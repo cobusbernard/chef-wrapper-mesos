@@ -1,3 +1,11 @@
+# 0.1.55
+
+Adding in the required work_dir value.
+
+# 0.1.54
+
+Upgrading to version 1.1.2
+
 # 0.1.53
 
 Removing the vagrant-ohai hack for VMs.
