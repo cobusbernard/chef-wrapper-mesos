@@ -1,3 +1,7 @@
+# 0.1.57
+
+Upgrading to version 1.0.1
+
 # 0.1.56
 
 Downgrading to 0.28.2 due to work_dir flag issues.
